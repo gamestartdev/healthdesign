@@ -1,0 +1,3 @@
+[submodule "Assets/Meteor-Unity"]
+	path = Assets/Meteor-Unity
+	url = https://github.com/hiddenswitch/Meteor-Unity.git
