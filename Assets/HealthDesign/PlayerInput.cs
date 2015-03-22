@@ -54,6 +54,11 @@ public class PlayerInput : MonoBehaviour
 	    }
 	}
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(transform.position, .5f);
+    }
 
 	void onTriggerExitEvent( Collider2D col )
 	{
