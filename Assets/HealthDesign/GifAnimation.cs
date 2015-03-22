@@ -44,7 +44,7 @@ class Gif
         {
             Texture2D currentFrame;
             this.Frames.GetNextFrame(out currentFrame, out delay);
-            sprite = Sprite.Create(currentFrame, new Rect(0, 0, currentFrame.width, currentFrame.height), Vector2.zero, 100f);
+            sprite = Sprite.Create(currentFrame, new Rect(0, 0, currentFrame.width, currentFrame.height), new Vector2(0.5f, 0.5f), 600f);
         }
         return new Frame { Delay = delay, Sprite = sprite };
     }

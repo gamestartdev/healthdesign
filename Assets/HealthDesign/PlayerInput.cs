@@ -15,18 +15,15 @@ public class PlayerInput : MonoBehaviour
 	private float normalizedHorizontalSpeed = 0;
 
 	private PlayerPhysics _playerPhysics;
-	private Animator _animator;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
-
-
+    private GifAnimation _gifAnimation;
 
 
 	void Awake()
 	{
-		_animator = GetComponent<Animator>();
+	    _gifAnimation = GetComponent<GifAnimation>();
         _playerPhysics = GetComponent<PlayerPhysics>();
-
 		// listen to some events for illustration purposes
 		_playerPhysics.onControllerCollidedEvent += onControllerCollider;
 		_playerPhysics.onTriggerEnterEvent += onTriggerEnterEvent;
@@ -60,6 +57,10 @@ public class PlayerInput : MonoBehaviour
 
 	#endregion
 
+    void PlayAnimation(PlayerAnimState state)
+    {
+        _gifAnimation.CurrentState = state;
+    }
 
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
@@ -77,7 +78,7 @@ public class PlayerInput : MonoBehaviour
 				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
 
 			if( _playerPhysics.isGrounded )
-				_animator.Play( Animator.StringToHash( "Run" ) );
+                PlayAnimation(PlayerAnimState.MOVE);
 		}
 		else if( Input.GetKey( KeyCode.LeftArrow ) )
 		{
@@ -86,23 +87,23 @@ public class PlayerInput : MonoBehaviour
 				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
 
 			if( _playerPhysics.isGrounded )
-				_animator.Play( Animator.StringToHash( "Run" ) );
-		}
+                PlayAnimation(PlayerAnimState.MOVE);
+        }
 		else
 		{
 			normalizedHorizontalSpeed = 0;
 
 			if( _playerPhysics.isGrounded )
-				_animator.Play( Animator.StringToHash( "Idle" ) );
-		}
+                PlayAnimation(PlayerAnimState.IDLE);
+        }
 
 
 		// we can only jump whilst grounded
 		if( _playerPhysics.isGrounded && Input.GetKeyDown( KeyCode.UpArrow ) )
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
-			_animator.Play( Animator.StringToHash( "Jump" ) );
-		}
+            PlayAnimation(PlayerAnimState.JUMP);
+        }
 
 
 		// apply horizontal speed smoothing it
