@@ -38,7 +38,6 @@ class Gif
 
     public Frame GetNextFrame()
     {
-        Debug.Log(Time.time);
         float delay = 0.5f;
         Sprite sprite = null;
         if (this.Frames != null)

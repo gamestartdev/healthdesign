@@ -47,12 +47,18 @@ public class PlayerInput : MonoBehaviour
 	void onTriggerEnterEvent( Collider2D col )
 	{
 		Debug.Log( "onTriggerEnterEvent: " + col.gameObject.name );
+	    Food food = col.GetComponent<Food>();
+	    if (food)
+	    {
+	        food.Eat(this);
+	    }
 	}
 
 
 	void onTriggerExitEvent( Collider2D col )
 	{
 		Debug.Log( "onTriggerExitEvent: " + col.gameObject.name );
+
 	}
 
 	#endregion

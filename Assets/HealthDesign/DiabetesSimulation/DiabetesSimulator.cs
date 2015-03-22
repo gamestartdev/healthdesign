@@ -70,6 +70,10 @@ public class DiabetesSimulator : MonoBehaviour {
 		}
 	}
 
+    public void addFood(int strength, int time)
+    {
+        this.addAffector(new Meal(timeStep, strength * foodStrengthScaleFactor, time * foodTimeScaleFactor));
+    }
 	
 	void showInsulinButtons(){
 		GUI.Label(new Rect(Screen.width / 8, Screen.height / 20, Screen.width / 8, Screen.height / 8), "TAKE SOME INSULIN!");
