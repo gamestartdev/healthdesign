@@ -49,8 +49,9 @@ public class DiabetesGrapher : MonoBehaviour
 
     private float PositionY(float x)
     {
-        float ratio = ((_simulator.BloodSugar - _simulator.bloodSugarDangerLowerThreshold) /
-                   _simulator.bloodSugarDangerUpperThreshold);
+        float ratio = ((_simulator.BloodSugar - _simulator.LowSugar) /
+                   _simulator.HighSugar);
+
         return ratio;
     }
 	

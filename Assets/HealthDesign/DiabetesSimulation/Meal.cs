@@ -3,15 +3,20 @@
 		public long durationInTicks;
 		public double timeStepEaten;
 		
-		public Meal(double time, int carbs, long duration){
+		public Meal(double time, int carbs, long duration, string name="Meal")
+		{
+		    this.Name = name;
 			this.carbohydratesInGrams = carbs;
 			this.durationInTicks = duration;
 			this.timeStepEaten = time;
 		}
-		public bool isExpired(double tick){
+		public bool IsExpired(double tick){
 			return tick > timeStepEaten + durationInTicks;
 		}
-		public float getAlterationForTick(double tick){
+
+	    public string Name { get; private set; }
+
+	    public float GetAlterationForTick(double tick){
 			return (float)this.carbohydratesInGrams / (float)this.durationInTicks;
 		}
 	}

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Food : MonoBehaviour
 {
-
+    public string Name = "Food";
     public int strength = 100;
     public int timeScale = 600;
     private DiabetesSimulator _simulator;
@@ -18,7 +18,7 @@ public class Food : MonoBehaviour
 	
     public void Eat(PlayerInput playerInput)
     {
-        _simulator.addFood(strength, timeScale);
+        _simulator.addFood(strength, timeScale, Name);
         Destroy(gameObject);
     }
 }

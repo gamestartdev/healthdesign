@@ -6,7 +6,9 @@
 		long peak;
 		long duration;
 		
-		public InsulinShot(InsulinType type, double startTime){
+		public InsulinShot(InsulinType type, double startTime, string name="Insulin")
+		{
+		    this.Name = name;
 			this.typeOfShot = type;
 			this.timeStepAdministered = startTime;
 			this.onset = randomNumberBetween(typeOfShot.onsetDelayInTicksMinimum,typeOfShot.onsetDelayInTicksMaximum);
@@ -14,11 +16,13 @@
 			this.duration = randomNumberBetween(typeOfShot.durationInTicksMinimum,typeOfShot.durationInTicksMaximum);
 		}
 	
-		public bool isExpired(double tick){
+		public bool IsExpired(double tick){
 			return tick > timeStepAdministered + duration;
 		}
-		
-		public float getAlterationForTick(double tick){
+
+	    public string Name { get; private set; }
+
+	    public float GetAlterationForTick(double tick){
 			if(tick < timeStepAdministered + onset){
 				return 0;
 			}else if(tick < timeStepAdministered + peak){

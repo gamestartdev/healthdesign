@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public interface IBloodSugarAffector {
-	float getAlterationForTick(double tick);
-	bool isExpired(double tick);
+	float GetAlterationForTick(double tick);
+	bool IsExpired(double tick);
+    string Name { get; }
 }
