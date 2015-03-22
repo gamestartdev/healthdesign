@@ -1,0 +1,16 @@
+
+v1.1
+- Added: Mirrored drawing modes (X, Y)
+- Added: Settings Tab
+- Added: Automagic Outline & Outline color setting
+- Added: "wasModified" boolean, Display * in window title if image was modified (not working in all conditions yet)
+- Added: Added "SaveTo" button, to save over the current loadbuffer image file
+
+- Changed: Moved grid color settings to Settings tab
+- Changed: UI adjustments
+
+- Known issues: If you do floodfill at the same position twice, error message appears (but it doesn't break anything..)
+- Known issues: If you enable [x] AutoBorder, canvas doesn't always update automatically (draw/erase something to update it)
+
+v1.0
+- Initial release ( Matching image, https://twitter.com/tom_speak/status/560120527311106050 )

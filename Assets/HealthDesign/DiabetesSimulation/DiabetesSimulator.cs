@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Cloud.Analytics;
@@ -84,9 +85,6 @@ public class DiabetesSimulator : MonoBehaviour {
             currentWarning = BloodSugarWarning.LOW;
         if (currentWarning != _warning)
         {
-
-            int totalPotions = 5;
-            int totalCoins = 100;
             UnityAnalytics.CustomEvent("bloodSugarState", new Dictionary<string, object>
             {
                 { "warning", currentWarning },
@@ -94,7 +92,27 @@ public class DiabetesSimulator : MonoBehaviour {
             });
             Debug.Log("Changing state: "+ currentWarning);
             _warning = currentWarning;
+            StopAllCoroutines();
+            if (_warning == BloodSugarWarning.HIGH || _warning == BloodSugarWarning.LOW)
+            {
+                StartCoroutine(ReloadLevel());
+            }
+
         }
+        if (transform.position.y < -100)
+        {
+            Application.LoadLevel(Application.loadedLevelName);
+            UnityAnalytics.CustomEvent("gameOver", new Dictionary<string, object>
+            {
+                { "reason", "Fell off ledge"},
+            });
+        }
+    }
+
+    IEnumerator ReloadLevel()
+    {
+        yield return new WaitForSeconds(2f);
+        Application.LoadLevel(Application.loadedLevelName);
     }
 
 	void showBar(){

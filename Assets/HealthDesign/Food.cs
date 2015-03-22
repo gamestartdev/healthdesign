@@ -6,6 +6,7 @@ public class Food : MonoBehaviour
     public string Name = "Food";
     public int strength = 100;
     public int timeScale = 600;
+    public Vector3 Rotation = new Vector3(0,0.5f,0);
     private DiabetesSimulator _simulator;
 
 	void Start ()
@@ -20,5 +21,10 @@ public class Food : MonoBehaviour
     {
         _simulator.addFood(strength, timeScale, Name);
         Destroy(gameObject);
+    }
+
+    void Update()
+    {
+        transform.Rotate(Rotation);
     }
 }
