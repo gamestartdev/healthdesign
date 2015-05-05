@@ -40,7 +40,7 @@ public class BgGraph : MonoBehaviour {
 
         var effectVal = 0f;
         foreach (var affector in diabetesSimulator.Affectors) {
-            effectVal += affector.LastAlteration;
+           // effectVal += affector.LastAlteration;
         }
         mPlotZ.UpdateValue = effectVal * 100;
     }
