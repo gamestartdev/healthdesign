@@ -11,6 +11,7 @@ class PlayerMovementBloodSugarAffector : IBloodSugarAffector
     {
         var energyOutput = -_energyOutput;
         _energyOutput = 0;
+        _lastAlteration = energyOutput;
         return energyOutput;
     }
 
@@ -27,6 +28,13 @@ class PlayerMovementBloodSugarAffector : IBloodSugarAffector
     public void QueueEnergyOutput(int bloodSugarAffect)
     {
         _energyOutput += bloodSugarAffect;
+    }
+
+    private float _lastAlteration;
+    public float LastAlteration {
+        get {
+            return _lastAlteration;
+        }
     }
 }
 	
@@ -112,6 +120,7 @@ public class PlayerInput : MonoBehaviour
 	{
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _playerPhysics.velocity;
+	    int currentBloodSugarAffect = 0;
 
 		if( _playerPhysics.isGrounded )
 			_velocity.y = 0;
@@ -125,7 +134,7 @@ public class PlayerInput : MonoBehaviour
 		    if (_playerPhysics.isGrounded)
 		    {
                 PlayAnimation(PlayerAnimState.MOVE);
-                _bloodSugarAffector.QueueEnergyOutput(moveBloodSugarAffect);
+		        currentBloodSugarAffect += moveBloodSugarAffect;
 		    }
 		}
 		else if( Input.GetKey( KeyCode.LeftArrow ) )
@@ -137,7 +146,8 @@ public class PlayerInput : MonoBehaviour
             if (_playerPhysics.isGrounded)
             {
                 PlayAnimation(PlayerAnimState.MOVE);
-                _bloodSugarAffector.QueueEnergyOutput(moveBloodSugarAffect);
+                currentBloodSugarAffect += moveBloodSugarAffect;
+
             }
         }
 		else
@@ -154,7 +164,7 @@ public class PlayerInput : MonoBehaviour
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             PlayAnimation(PlayerAnimState.JUMP);
-            _bloodSugarAffector.QueueEnergyOutput(jumpBloodSugarAffect);
+            currentBloodSugarAffect += jumpBloodSugarAffect;
         }
 
 
@@ -166,6 +176,8 @@ public class PlayerInput : MonoBehaviour
 		_velocity.y += gravity * Time.deltaTime;
 
 		_playerPhysics.move( _velocity * Time.deltaTime );
+        _bloodSugarAffector.QueueEnergyOutput(currentBloodSugarAffect);
+
 	}
 
 }
