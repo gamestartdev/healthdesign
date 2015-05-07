@@ -5,7 +5,14 @@
 		long onset;
 		long peak;
 		long duration;
-		
+
+        private float _lastAlteration;
+        public float LastAlteration {
+            get {
+                return _lastAlteration;
+            }
+        }
+
 		public InsulinShot(InsulinType type, double startTime, string name="Insulin")
 		{
 		    this.Name = name;
@@ -28,15 +35,19 @@
 			}else if(tick < timeStepAdministered + peak){
 				long range = (peak-onset);
 				long progress = (int)(tick-timeStepAdministered + onset);
-				return -typeOfShot.infusionRateInMilligramsPerKilogramPerMinute * (progress/range); 
+                _lastAlteration =  -typeOfShot.infusionRateInMilligramsPerKilogramPerMinute * (progress / range);
+			    return _lastAlteration;
 			}
 			else{
 				long range = (duration-peak);
 				long progress = (int)(tick-timeStepAdministered + peak);
-				return -typeOfShot.infusionRateInMilligramsPerKilogramPerMinute * ((range-progress)/range);
+                _lastAlteration  = -typeOfShot.infusionRateInMilligramsPerKilogramPerMinute * ((range - progress) / range);
+			    return _lastAlteration;
 			}
-		}
+		;}
+
 		private static int randomNumberBetween(int min,int max){
-		return new System.Random().Next(min,max);
-	}
-	}
+		    return new System.Random().Next(min,max);
+	    }
+
+    }

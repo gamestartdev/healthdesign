@@ -2,7 +2,13 @@
 		public int carbohydratesInGrams;
 		public long durationInTicks;
 		public double timeStepEaten;
-		
+
+	    private float _lastAlteration;
+	    public float LastAlteration  {
+	        get {
+	            return _lastAlteration;
+	        } 
+	    }
 		public Meal(double time, int carbs, long duration, string name="Meal")
 		{
 		    this.Name = name;
@@ -16,7 +22,9 @@
 
 	    public string Name { get; private set; }
 
+
 	    public float GetAlterationForTick(double tick){
-			return (float)this.carbohydratesInGrams / (float)this.durationInTicks;
-		}
+			_lastAlteration =  (float)this.carbohydratesInGrams / (float)this.durationInTicks;
+	        return _lastAlteration;
+	;    }
 	}
