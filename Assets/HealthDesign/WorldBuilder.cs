@@ -37,10 +37,18 @@ public class WorldBuilder : MonoBehaviour {
     private int nextBlockIndex;
 
     void Awake() {
+
         int index = 0;
         while (PlayerPrefs.HasKey("WorldBlock_" + index)) {
             var deserializeObject = JsonConvert.DeserializeObject<WorldBlock>(PlayerPrefs.GetString("WorldBlock_" + index));
             Debug.Log(deserializeObject.position);
+            index++;
+        }
+    }
+
+    void OnGUI() {
+        if (GUILayout.Button("Reset DB")) {
+            PlayerPrefs.DeleteAll();
         }
     }
 
@@ -49,6 +57,7 @@ public class WorldBuilder : MonoBehaviour {
             var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             var worldBlock = new WorldBlock(){position = mouseWorldRay.origin, textureUrl =textureUrl};
             var json = JsonConvert.SerializeObject(worldBlock);
+            PlayerPrefs.SetString("WorldBlock_" +nextBlockIndex++, json);
             Debug.Log(json);
         }
         else if (Input.GetMouseButtonDown(1)) {
