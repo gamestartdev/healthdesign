@@ -1,85 +1,63 @@
-﻿using UnityEngine;
-using System.Collections;
-using DustinHorne.Json.Examples;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 
-public class WorldBuilder : MonoBehaviour
-{
-    private class WorldBlock {
-        
-        public string _id;
-        public Vector3 position;
+public class WorldBlock {
+    private readonly GameObject _gameObject;
+    private readonly GifAnimation _gifAnim;
+    private Vector3 _position;
+    private string _textureUrl;
 
-        private WorldBlock() { }
-        [JsonConstructor]
-        public WorldBlock(string _id, Vector3 position)
-        {
-            Debug.Log("public");
-            Debug.Log(this.position);
-            Debug.Log(position);
-
-            Debug.Log(this._id);
-            Debug.Log(_id);
-        }
-
-
-        public static WorldBlock Create() { return new WorldBlock() {_id = "asdf", position = Vector3.one*2}; }
+    public WorldBlock() {
+        _gameObject = new GameObject("WorldBlock");
+        _gameObject.AddComponent<BoxCollider2D>();
+        _gifAnim = _gameObject.AddComponent<GifAnimation>();
     }
 
-    public string worldTexture = "http://piskel-imgstore-b.appspot.com/img/2a8f582e-d065-11e4-a2d8-5bfbb68c2d8f.gif";
+    public string textureUrl {
+        get { return _textureUrl; }
+        set {
+            _textureUrl = value;
+            _gifAnim.idle = textureUrl;
+        }
+    }
+
+    public string _id { get; set; }
+
+    public Vector3 position {
+        get { return _position; }
+        set {
+            _position = value;
+            _gameObject.transform.position = new Vector3(value.x, value.y, 0);
+        }
+    }
+}
+
+public class WorldBuilder : MonoBehaviour {
+    public string textureUrl = "http://piskel-imgstore-b.appspot.com/img/2a8f582e-d065-11e4-a2d8-5bfbb68c2d8f.gif";
     private int nextBlockIndex;
 
-    private class Grid
-    {
-    }
-
-    // Use this for initialization
-    private void Start() {
-        var json = JsonConvert.SerializeObject(WorldBlock.Create());
-        Debug.Log(json);
-        WorldBlock deserializeObject = JsonConvert.DeserializeObject<WorldBlock>(json);
-        Debug.Log(deserializeObject.position);
-    }
-
-//
-//    public void Sample() {
-//        //This string is the JSON representation of the object
-//        string serialized = JsonConvert.SerializeObject(original);
-//
-//        //Now we can deserialize this string back into an object
-//        var newobject = JsonConvert.DeserializeObject<JNSimpleObjectModel>(serialized);
-//
-//        Debug.Log(newobject.IntList.Count);
-//    }
-
-
-    private Transform CreateWorldBlock(Vector3 pos) {
-        Debug.Log(pos);
-        var t = new GameObject().transform;
-        t.gameObject.AddComponent<BoxCollider2D>();
-        t.position = new Vector3(pos.x, pos.y, 0);
-        var gifAnim = t.gameObject.AddComponent<GifAnimation>();
-        gifAnim.idle = worldTexture;
-
-        return t;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            CreateWorldBlock(mouseWorldRay.origin);
+    void Awake() {
+        int index = 0;
+        while (PlayerPrefs.HasKey("WorldBlock_" + index)) {
+            var deserializeObject = JsonConvert.DeserializeObject<WorldBlock>(PlayerPrefs.GetString("WorldBlock_" + index));
+            Debug.Log(deserializeObject.position);
         }
-        else if (Input.GetMouseButtonDown(1))
-        {
+    }
+
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
             var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mouseWorldRay.origin, mouseWorldRay.direction);
-            if (hit)
-            {
+            var worldBlock = new WorldBlock(){position = mouseWorldRay.origin, textureUrl =textureUrl};
+            var json = JsonConvert.SerializeObject(worldBlock);
+            Debug.Log(json);
+        }
+        else if (Input.GetMouseButtonDown(1)) {
+            var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var hit = Physics2D.Raycast(mouseWorldRay.origin, mouseWorldRay.direction);
+            if (hit) {
                 Destroy(hit.collider.gameObject);
             }
         }
     }
+
 }
