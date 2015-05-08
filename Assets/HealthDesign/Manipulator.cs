@@ -7,7 +7,6 @@ public class Manipulator : MonoBehaviour {
     private Vector3 _offset;
 
     void OnMouseDown() {
-
         _offset = transform.position - ScreenPointToRay.origin;
     }
 
@@ -15,5 +14,4 @@ public class Manipulator : MonoBehaviour {
         var ray = ScreenPointToRay;
         transform.position = ScreenPointToRay.origin + _offset;
     }
-
 }

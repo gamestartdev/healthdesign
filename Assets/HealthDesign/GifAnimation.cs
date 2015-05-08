@@ -3,6 +3,7 @@ using UnityEngine;
 using System.IO;
 using Gif2Textures;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum PlayerAnimState
 {
@@ -17,8 +18,7 @@ struct Frame
     public float Delay;
 }
 
-class Gif
-{
+class Gif {
     public readonly string url;
     public GifFrames Frames;
 
@@ -28,12 +28,13 @@ class Gif
         this.Frames = null;
     }
 
-    public IEnumerator Download()
-    {
+    public IEnumerator Download() {
+        Debug.Log(url);
         WWW www = new WWW(this.url);
         yield return www;
+        var memoryStream = new MemoryStream(www.bytes);
         this.Frames = new GifFrames();
-        this.Frames.Load(new MemoryStream(www.bytes), true);
+        this.Frames.Load(memoryStream, true);
     }
 
     public Frame GetNextFrame()
