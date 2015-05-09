@@ -98,4 +98,20 @@ public class GifAnimation : MonoBehaviour
             _spriteRenderer.sprite = frame.Sprite;
         return frame;
     }
+
+    public void UpdateIdle(string value) {
+        UpdateGif(value, 0);
+    }
+    public void UpdateMove(string value) {
+        UpdateGif(value, 1);
+    }
+    public void UpdateJump(string value) {
+        UpdateGif(value, 2);
+    }
+
+    private void UpdateGif(string value, int index) {
+        var gif = new Gif(value);
+        StartCoroutine(gif.Download());
+        _gifs[index] = gif;
+    }
 }

@@ -6,16 +6,27 @@ public class WorldObject : MonoBehaviour {
 
     public void Placed() {
         _food = GetComponent<Food>();
-        _worldBlockBehaviour = GetComponent<WorldBlockBehaviour>();
         if (_food) {
             _food.enabled = true;
         }
+        _gifAnimation = GetComponent<GifAnimation>();
+        if (_gifAnimation) {
+            _gifAnimation.enabled = true;
+        }
+    }
+
+    public void Start() {
+        _food = GetComponent<Food>();
+        _gifAnimation = GetComponent<GifAnimation>();
     }
 
     public Vector3 Rotation = new Vector3(0, 0.5f, 0);
     private Food _food;
-    private WorldBlockBehaviour _worldBlockBehaviour;
-    private string _urlInput;
+    private GifAnimation _gifAnimation;
+    private string _idle = "";
+    private string _move = "";
+    private string _jump = "";
+
     void Update() {
         if (Model) Model.Rotate(Rotation);
     }
@@ -27,12 +38,18 @@ public class WorldObject : MonoBehaviour {
             GUILayout.Label("Food Time Scale: " + _food.timeScale);
             _food.timeScale = (int)GUILayout.HorizontalSlider(_food.timeScale, 0, 1000);
         }
-        if (_worldBlockBehaviour) {
-            GUILayout.Label("Image URL: " + _urlInput);
-            _urlInput = GUILayout.TextField(_urlInput, 1000);
-            if (GUILayout.Button("Download Image!")) {
-                _worldBlockBehaviour.WorldBlock.textureUrl = _urlInput;
-            }
+        if (_gifAnimation) {
+            UpdateAnim("Idle", ref _idle, _gifAnimation.UpdateIdle);
+            UpdateAnim("Move", ref _move, _gifAnimation.UpdateMove);
+            UpdateAnim("Jump", ref _jump, _gifAnimation.UpdateJump);
+        }
+    }
+
+    private void UpdateAnim(string name, ref string value, Action<string> update) {
+        GUILayout.Label("Set " + name + ":");
+        value = GUILayout.TextArea(value);
+        if (GUILayout.Button("Download " + name + "!")) {
+            update(value);
         }
     }
 }

@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class WorldBlockBehaviour : MonoBehaviour {
 
-    public  GifAnimation GifAnim;
+    public GifAnimation GifAnim { get { return GetComponent<GifAnimation>(); } }
     public WorldBlock WorldBlock;
-    void Start() {
+    void Awake() {
         if (WorldBlock == null) {
             WorldBlock = new WorldBlock(this);
         }
+        gameObject.layer = 0;
     }
 }

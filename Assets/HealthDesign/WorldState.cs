@@ -3,12 +3,12 @@ using System.Collections;
 using Newtonsoft.Json;
 
 public class WorldState : MonoBehaviour {
-
+    public WorldObject[] FoodsModels;
     private int nextBlockIndex;
     private string keyPrefix = "WorldState_";
     JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
-    void Awake() {
+    void Start() {
         int index = 0;
         while (PlayerPrefs.HasKey(keyPrefix + index)) {
             string value = PlayerPrefs.GetString(keyPrefix + index);
@@ -28,7 +28,6 @@ public class WorldState : MonoBehaviour {
     public void Save(object worldBlock) {
         var json = JsonConvert.SerializeObject(worldBlock, Formatting.None, settings);
         Debug.Log("json: "+json);
-
         PlayerPrefs.SetString(keyPrefix + nextBlockIndex++, json);
         Debug.Log(json);
     }
