@@ -1,21 +1,19 @@
 using UnityEngine;
 
 public class WorldBlock {
-    private readonly GifAnimation _gifAnim;
     private readonly WorldBlockBehaviour _worldBlockBehaviour;
 
-    public WorldBlock() : this(new GameObject("WorldBlock").AddComponent<WorldBlockBehaviour>()) {}
+    //public WorldBlock() : this(new GameObject("WorldBlock").AddComponent<WorldBlockBehaviour>()) {}
     public WorldBlock(WorldBlockBehaviour blockBehaviour) {
         _worldBlockBehaviour = blockBehaviour;
         _worldBlockBehaviour.WorldBlock = this;
-        _worldBlockBehaviour.gameObject.AddComponent<BoxCollider2D>();
-        _gifAnim = _worldBlockBehaviour.gameObject.AddComponent<GifAnimation>();
+        Debug.Log(blockBehaviour);
     }
 
     public string textureUrl {
-        get { return _gifAnim.idle; }
+        get { return _worldBlockBehaviour.GifAnim.idle; }
         set {
-            if(value.Length > 0) _gifAnim.idle = value;
+            if (value.Length > 0) _worldBlockBehaviour.GifAnim.idle = value;
         }
     }
 

@@ -74,9 +74,10 @@ public class GifAnimation : MonoBehaviour
     Gif[] _gifs;
     SpriteRenderer _spriteRenderer;
 
-    IEnumerator Start()
-    {
-        _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+    IEnumerator Start() {
+        _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        if(!_spriteRenderer)
+            _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         _gifs = new[] { new Gif(idle), new Gif(move), new Gif(jump) };
 
         foreach (var gif in _gifs)
@@ -93,7 +94,8 @@ public class GifAnimation : MonoBehaviour
     private Frame NextFrame()
     {
         var frame = _gifs[(int) _currentState].GetNextFrame();
-        _spriteRenderer.sprite = frame.Sprite;
+        if (_spriteRenderer)
+            _spriteRenderer.sprite = frame.Sprite;
         return frame;
     }
 }
