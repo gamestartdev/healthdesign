@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
+
 using System.Collections;
 
 class PlayerMovementBloodSugarAffector : IBloodSugarAffector
@@ -49,6 +51,7 @@ public class PlayerInput : MonoBehaviour
 	public float jumpHeight = 3f;
     public int moveBloodSugarAffect = 1;
     public int jumpBloodSugarAffect = 5;
+	public Text text;
 
 	[HideInInspector]
 	private float normalizedHorizontalSpeed = 0;
@@ -62,6 +65,7 @@ public class PlayerInput : MonoBehaviour
 
     void Awake()
 	{
+		text = FindObjectOfType<Text>();
 	    _gifAnimation = GetComponent<GifAnimation>();
         _playerPhysics = GetComponent<PlayerPhysics>();
 	    _simulator = GetComponent<DiabetesSimulator>();
@@ -93,7 +97,11 @@ public class PlayerInput : MonoBehaviour
 	    if (food)
 	    {
 	        food.Eat(this);
-	    }
+		}
+		var story = col.GetComponent<GifStory>();
+		if(col.GetComponent<GifStory>()){
+			story.Bump(this);
+		}
 	}
 
     void OnDrawGizmos()

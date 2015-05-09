@@ -3,15 +3,15 @@ using UnityEngine;
 using System.IO;
 using Gif2Textures;
 using System.Collections;
-
+using UnityEngine.UI;
 
 public class GifStory : MonoBehaviour
 {
-
+	public string message = "You Win!";
     public string url = "http://piskel-imgstore-b.appspot.com/img/ef558485-d037-11e4-bba4-5bfbb68c2d8f.gif";
     Gif _gif;
     SpriteRenderer _spriteRenderer;
-
+	public Text text;
     IEnumerator Start()
     {
         _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
@@ -24,12 +24,17 @@ public class GifStory : MonoBehaviour
         }
     }
 
+	public void Bump(PlayerInput player) {
+		player.text.enabled = true;
+		player.text.text = message;
+	}
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, .5f);
-    }
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position, 1.5f);
+
+	}
 
     private Frame NextFrame()
     {

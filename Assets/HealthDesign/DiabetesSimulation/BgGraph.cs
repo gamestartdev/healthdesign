@@ -22,7 +22,7 @@ public class BgGraph : MonoBehaviour {
         playerInput = FindObjectOfType<PlayerInput>();
         // Setup the graph
         mGraph = GetComponent<NGraph>();
-        mGraph.setRanges(0, 10, 0, 400);
+        mGraph.setRanges(0, 10, 0, 1000);
         mGraph.AxesDrawAt = new Vector2(-10, -10);
 
         // Make the two plots

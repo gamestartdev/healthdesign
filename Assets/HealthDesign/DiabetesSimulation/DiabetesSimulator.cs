@@ -8,16 +8,31 @@ public class DiabetesSimulator : MonoBehaviour {
  
 	public float timeScale = 1f;// time scale multiplier
 	private long timeStep;
-    public float HighSugar = 300;
-    public float LowSugar = 50;
-	public int insulinStrengthScaleFactor = 10;
-	public int insulinTimeScaleFactor = 10;
-	public int foodStrengthScaleFactor = 2;
-	public int foodTimeScaleFactor = 2;
+    public float HighSugar = 1000;
+    public float LowSugar = 0;
+	public static int insulinStrengthScaleFactor = 1;
+	public static int insulinTimeScaleFactor = 10;
+	public static int foodStrengthScaleFactor = 1;
+	static public int foodTimeScaleFactor = 1;
 	
-	InsulinType LYSPRO_ASPART_GLULISINE;
-	InsulinType REGULAR;
-	InsulinType DETEMIR_GLARGINE;
+	InsulinType LONG { get { return REGULAR;}}
+//			return  new InsulinType("Long Term", 
+//			                                                                    long_onsetDelay,
+//			                                                                    long_onsetDelay,
+//			                                                                    long_peakDelay,
+//			                                                                    long_peakDelay,
+//			                                                                    long_duration,
+//			                                                                    long_duration,
+//			                                                                    long_infusionRate); }}
+
+	InsulinType REGULAR { get { return  new InsulinType("Insulin", 
+			                                                    onsetDelay,
+                                                    			onsetDelay,
+                                                    			peakDelay,
+			                                                    peakDelay,
+			                                                    duration,
+			                                                    duration,
+			                                                    infusionRate); }}
 
     private List<IBloodSugarAffector> _affectors = new List<IBloodSugarAffector>();
     public List<IBloodSugarAffector> Affectors
@@ -31,6 +46,26 @@ public class DiabetesSimulator : MonoBehaviour {
         get { return bloodSugarMilligramsPerDecaliter; }
     }
 
+//	
+//	public int long_onsetDelay =	2*insulinTimeScaleFactor;
+//	public int long_peakDelay = 	8*insulinTimeScaleFactor;
+//	public int long_duration = 		24*insulinTimeScaleFactor;
+//	public int long_infusionRate = 	1*(insulinStrengthScaleFactor);
+
+//	public int regular_onsetDelayMin =2*insulinTimeScaleFactor;
+//	public int regular_onsetDelayMax = 4*insulinTimeScaleFactor;
+//	public int regular_peakDelayMin = 8*insulinTimeScaleFactor;
+//	public int regular_peakDelayMax = 16*insulinTimeScaleFactor;
+//	public int regular_durationMin = 24*insulinTimeScaleFactor;
+//	public int regular_durationMax = 32*insulinTimeScaleFactor;
+//	public int regular_infusionRate = (int)(0.6f*(insulinStrengthScaleFactor/10));
+//
+
+	public int onsetDelay =2*insulinTimeScaleFactor;
+	public int peakDelay = 8*insulinTimeScaleFactor;
+	public int duration = 24*insulinTimeScaleFactor;
+	public int infusionRate = 2*(insulinStrengthScaleFactor);
+
 
     void Start () {
         const string projectId = "d1f9f021-f08d-4c81-9979-ecbad58b42b8";
@@ -38,9 +73,6 @@ public class DiabetesSimulator : MonoBehaviour {
 
 		timeStep = 0;
 		bloodSugarMilligramsPerDecaliter = (HighSugar - LowSugar)/2;
-		LYSPRO_ASPART_GLULISINE = new InsulinType("Lyspro/Aspart/Glulisine",1*insulinTimeScaleFactor,1*insulinTimeScaleFactor,4*insulinTimeScaleFactor,8*insulinTimeScaleFactor,16*insulinTimeScaleFactor,24*insulinTimeScaleFactor,7*(insulinStrengthScaleFactor/10));
-		REGULAR = new InsulinType("Regular Insulin", 2*insulinTimeScaleFactor,4*insulinTimeScaleFactor,8*insulinTimeScaleFactor,16*insulinTimeScaleFactor,24*insulinTimeScaleFactor,32*insulinTimeScaleFactor,6*(insulinStrengthScaleFactor/10));
-		DETEMIR_GLARGINE = new InsulinType("Detemir/Glargine",8*insulinTimeScaleFactor,12*insulinTimeScaleFactor,32*insulinTimeScaleFactor,40*insulinTimeScaleFactor,96*insulinTimeScaleFactor,192*insulinTimeScaleFactor,0.8f*(insulinStrengthScaleFactor/10));
 	}
 	
 	void FixedUpdate () {
@@ -53,9 +85,9 @@ public class DiabetesSimulator : MonoBehaviour {
 	void OnGUI(){
 		showInsulinButtons();
 		//showFoodButtons();
-		showBar();
+		//showBar();
 		showBloodSugarInfo();
-	    //showAffectorNames();
+	    showAffectorNames();
 	}
 
     private void showAffectorNames()
@@ -149,15 +181,15 @@ public class DiabetesSimulator : MonoBehaviour {
 	
 	void showInsulinButtons(){
 
-		if(GUI.Button(new Rect(0,Screen.height/6*5,Screen.width/3,Screen.height/6),"Long-term Insulin\nDetemir Glargine")){
-            this.addAffector(new InsulinShot(DETEMIR_GLARGINE, timeStep, "Detemir Glargine"));
+//		if(GUI.Button(new Rect(0,Screen.height/6*5,Screen.width/3,Screen.height/6),"Long-term Insulin")){
+//			this.addAffector(new InsulinShot(LONG, timeStep, "Long-Term Insulin"));
+//		}
+		if(GUI.Button(new Rect(Screen.width/3,Screen.height/6*5,Screen.width/3,Screen.height/6),"Insulin")){
+			this.addAffector(new InsulinShot(REGULAR,timeStep, "Insulin"));
 		}
-		if(GUI.Button(new Rect(Screen.width/3,Screen.height/6*5,Screen.width/3,Screen.height/6),"Regular Insulin")){
-			this.addAffector(new InsulinShot(REGULAR,timeStep));
-		}
-		if(GUI.Button(new Rect(Screen.width/3*2,Screen.height/6*5,Screen.width/3,Screen.height/6),"Instant Insulin")){
-			this.addAffector(new InsulinShot(LYSPRO_ASPART_GLULISINE,timeStep));
-		}
+//		if(GUI.Button(new Rect(Screen.width/3*2,Screen.height/6*5,Screen.width/3,Screen.height/6),"Instant Insulin")){
+//			this.addAffector(new InsulinShot(LYSPRO_ASPART_GLULISINE,timeStep));
+//		}
 	}
 	
 	public void addAffector(IBloodSugarAffector affector){
