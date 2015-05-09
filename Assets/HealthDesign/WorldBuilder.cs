@@ -20,7 +20,7 @@ public class WorldBuilder : MonoBehaviour {
         foreach (var worldTool in WorldObjectPrefabs) {
             var worldObject = Instantiate(worldTool);
             worldObject.transform.parent = worldObjectsParent;
-            worldObject.transform.localPosition = new Vector3(_worldObjects.Count, 0, 0);
+            worldObject.transform.localPosition = new Vector3(_worldObjects.Count * 2, 0, 0);
             worldObject.gameObject.layer = HudLayer;
             _worldObjects.Add(worldObject);
         }
@@ -42,6 +42,7 @@ public class WorldBuilder : MonoBehaviour {
 
     void OnGUI() {
         _hudSelection.SelectedGUI();
+        if(GUILayout.Button("Clear")) PlayerPrefs.DeleteAll();
     }
 
     private static void DestroyWorldObject() {
@@ -52,31 +53,13 @@ public class WorldBuilder : MonoBehaviour {
         }
     }
 
-    private void LeftClick() {
-        var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var worldBlock = new WorldBlock {position = mouseWorldRay.origin, textureUrl = textureUrl};
-        _worldState.Save(worldBlock);
-    }
-
-    private void PlaceRemoveBlock() {
-        if (Input.GetMouseButtonDown(0)) {
-            var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var worldBlock = new WorldBlock {position = mouseWorldRay.origin, textureUrl = textureUrl};
-            _worldState.Save(worldBlock);
-        } else if (Input.GetMouseButtonDown(1)) {
-            var mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hit = Physics2D.Raycast(mouseWorldRay.origin, mouseWorldRay.direction);
-            if (hit) {
-                Destroy(hit.collider.gameObject);
-            }
-        }
-    }
 
     private class HudSelection {
         private static readonly Plane _plane = new Plane(Vector3.back, 0);
         private Vector3 _mainScreenMouseOffset;
         private WorldObject _selectedObject;
-        private WorldObject _lastSelectedObject;
+        private bool _editWindowOpen;
+        private bool _moved;
 
         private static Vector3 MainScreenZeroZ
         {
@@ -92,26 +75,59 @@ public class WorldBuilder : MonoBehaviour {
         private static Ray HudToRay { get { return HudCamera.ScreenPointToRay(Input.mousePosition); } }
         private static Ray MainScreenToRay { get { return Camera.main.ScreenPointToRay(Input.mousePosition); } }
 
+
         public void Deselect() {
             if (!_selectedObject) return;
 
-            _selectedObject.gameObject.layer = 0;
-            _selectedObject.Placed();
-            _selectedObject = null;
+            if (_moved) {
+                _selectedObject.gameObject.layer = 0;
+                _selectedObject.Placed();
+            }
+            else {
+                _editWindowOpen = true;
+            }
+        }
+
+        public void Update() {
+            if (Input.GetKeyDown(KeyCode.Escape)) { CloseEditWindow(); }
+            if (_editWindowOpen) return;
+            if (!_selectedObject) return;
+            var newPosition = MainScreenToRay.origin + _mainScreenMouseOffset;
+            if ((_selectedObject.transform.position - newPosition).sqrMagnitude > 0.1f) {
+                _moved = true;
+            }
+            _selectedObject.transform.position = newPosition;
         }
 
         public void Select() {
+            if (_editWindowOpen) return;
+
             _selectedObject = FindSelection();
-            _lastSelectedObject = _selectedObject;
             if (!_selectedObject) return;
             
             _selectedObject.transform.position = MainScreenZeroZ;
             _mainScreenMouseOffset = _selectedObject.transform.position - MainScreenToRay.origin;
+            _moved = false;
         }
 
         public void SelectedGUI() {
-            if (!_lastSelectedObject) return;
-            _lastSelectedObject.SelectedGUI();
+            if (!_editWindowOpen) return;
+            var clientRect = new Rect(Screen.width * 0.25f, Screen.height * 0.25f, Screen.width * 0.5f, Screen.height * 0.5f);
+            GUI.ModalWindow(0, clientRect, ModalEditWindow, _selectedObject.name);
+        }
+
+        private void ModalEditWindow(int id) {
+            _selectedObject.SelectedGUI();
+            if (GUILayout.Button("Finished Editing!")) {
+                CloseEditWindow();
+            }
+        }
+
+        private void CloseEditWindow() {
+            _selectedObject = null;
+            _editWindowOpen = false;
+            _moved = false;
+            Deselect();
         }
 
         private static WorldObject FindSelection() {
@@ -119,16 +135,10 @@ public class WorldBuilder : MonoBehaviour {
             var main = Physics2D.RaycastAll(MainScreenToRay.origin, HudToRay.direction);
             var orderByDescending = hud.Concat(main).Select(h => h.collider.GetComponent<WorldObject>());
             var firstOrDefault = orderByDescending.FirstOrDefault();
-            
             return IsHud(firstOrDefault) ? Instantiate(firstOrDefault) : firstOrDefault ;
         }
 
-        private static bool IsHud(WorldObject worldObject) { return worldObject.gameObject.layer == HudLayer; }
-
-        public void Update() {
-            if (!_selectedObject) return;
-            _selectedObject.transform.position = MainScreenToRay.origin + _mainScreenMouseOffset;
-        }
+        private static bool IsHud(WorldObject worldObject) { return worldObject && worldObject.gameObject.layer == HudLayer; }
 
     }
 }

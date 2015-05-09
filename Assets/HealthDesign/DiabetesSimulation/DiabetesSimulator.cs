@@ -55,7 +55,7 @@ public class DiabetesSimulator : MonoBehaviour {
 		//showFoodButtons();
 		showBar();
 		showBloodSugarInfo();
-	    showAffectorNames();
+	    //showAffectorNames();
 	}
 
     private void showAffectorNames()

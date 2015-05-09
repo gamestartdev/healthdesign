@@ -19,11 +19,11 @@ public class WorldState : MonoBehaviour {
         }
     }
 
-    void OnGUI() {
-        if (GUILayout.Button("Reset")) {
-            PlayerPrefs.DeleteAll();
-        }
-    }
+//    void OnGUI() {
+//        if (GUILayout.Button("Reset")) {
+//            PlayerPrefs.DeleteAll();
+//        }
+//    }
 
     public void Save(object worldBlock) {
         var json = JsonConvert.SerializeObject(worldBlock, Formatting.None, settings);

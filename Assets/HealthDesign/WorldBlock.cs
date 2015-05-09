@@ -1,32 +1,28 @@
 using UnityEngine;
 
 public class WorldBlock {
-    private readonly GameObject _gameObject;
     private readonly GifAnimation _gifAnim;
-    private Vector3 _position;
-    private string _textureUrl;
+    private readonly WorldBlockBehaviour _worldBlockBehaviour;
 
-    public WorldBlock() {
-        _gameObject = new GameObject("WorldBlock");
-        _gameObject.AddComponent<BoxCollider2D>();
-        _gifAnim = _gameObject.AddComponent<GifAnimation>();
+    public WorldBlock() : this(new GameObject("WorldBlock").AddComponent<WorldBlockBehaviour>()) {}
+    public WorldBlock(WorldBlockBehaviour blockBehaviour) {
+        _worldBlockBehaviour = blockBehaviour;
+        _worldBlockBehaviour.WorldBlock = this;
+        _worldBlockBehaviour.gameObject.AddComponent<BoxCollider2D>();
+        _gifAnim = _worldBlockBehaviour.gameObject.AddComponent<GifAnimation>();
     }
 
     public string textureUrl {
-        get { return _textureUrl; }
+        get { return _gifAnim.idle; }
         set {
-            _textureUrl = value;
-            _gifAnim.idle = textureUrl;
+            if(value.Length > 0) _gifAnim.idle = value;
         }
     }
 
     public string _id { get; set; }
 
     public Vector3 position {
-        get { return _position; }
-        set {
-            _position = value;
-            _gameObject.transform.position = new Vector3(value.x, value.y, 0);
-        }
+        get { return _worldBlockBehaviour.transform.position; }
+        set { _worldBlockBehaviour.transform.position = new Vector3(value.x, value.y, 0); }
     }
 }
