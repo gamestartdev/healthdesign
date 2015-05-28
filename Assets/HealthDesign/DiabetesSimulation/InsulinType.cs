@@ -18,5 +18,6 @@
 			this.durationInTicksMaximum = durationMax;
 			this.infusionRateInMilligramsPerKilogramPerMinute = infusionRate;
 		}
+
 		public InsulinType(string name, int onsetDelay, int peak, int duration, float infusionRate) : this(name,onsetDelay,onsetDelay,peak,peak,duration,duration,infusionRate){}
 	}

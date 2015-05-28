@@ -14,7 +14,7 @@ namespace AssemblyCSharp
 					tot=-3.203e-7*Math.Pow(g,4)+1.354e-4*Math.Pow(g,3)-1.759e-2*Math.Pow(g,2)+9.255e-2*g+99.951;
 				} else if (idur==4) {
 					tot=-3.31e-8*Math.Pow(g,4)+2.53e-5*Math.Pow(g,3)-5.51e-3*Math.Pow(g,2)-9.086e-2*g+99.95;
-				} else if (idur==5) {
+				} else if (idur==5) {	
 					tot=-2.95e-8*Math.Pow(g,4)+2.32e-5*Math.Pow(g,3)-5.55e-3*Math.Pow(g,2)+4.49e-2*g+99.3;
 				} else if (idur==6) {
 					tot=-1.493e-8*Math.Pow(g,4)+1.413e-5*Math.Pow(g,3)-4.095e-3*Math.Pow(g,2)+6.365e-2*g+99.7;
