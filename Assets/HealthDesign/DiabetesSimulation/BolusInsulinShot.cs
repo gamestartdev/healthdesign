@@ -15,14 +15,10 @@ using AssemblyCSharp;
 			return tick > timeStepAdministered + this.getDurationInSeconds();
 		}
 
-		public bool HasBegun(double tick){
-			return tick >= timeStepAdministered;
-		}
-
 	    public string Name { get; private set; }
 
 	    public float GetAlterationForTick(double tick, IDiabetesPatient patient){
-			if(this.HasBegun(tick) && !this.IsExpired (tick)){
+			if(tick >= this.timeStepAdministered && !this.IsExpired (tick)){
 			return Convert.ToSingle(LibGlucoDyn.deltaBGI(tick-this.timeStepAdministered, this.unitsInsulin, patient.getInsulinSensitivity(), patient.getPersonalInsulinDuration()));
 			}
 			return 0;

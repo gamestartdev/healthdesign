@@ -1,15 +1,12 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
-using System.Collections;
 
 class PlayerMovementBloodSugarAffector : IBloodSugarAffector
 {
     private int _energyOutput = 0;
 
     //This adds bad state.. redo
-    public float GetAlterationForTick(double tick)
+    public float GetAlterationForTick(double tick, IDiabetesPatient patient)
     {
         var energyOutput = -_energyOutput;
         _energyOutput = 0;

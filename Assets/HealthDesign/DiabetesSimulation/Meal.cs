@@ -16,10 +16,6 @@ public class Meal : IBloodSugarAffector {
 			return tick > timeStepEaten + 300;
 		}
 
-		public bool HasBegun(double tick){
-			return tick > timeStepEaten;
-		}
-
 	    public string Name { get; private set; }
 
 	    public float GetAlterationForTick(double tick, IDiabetesPatient patient){

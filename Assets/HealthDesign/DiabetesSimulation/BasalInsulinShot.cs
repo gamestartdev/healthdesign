@@ -1,6 +1,6 @@
 using System;
 using AssemblyCSharp;	
-	public class BasalInsulinShot : IBloodSugarAffector{
+	public class BasalInsulinShot : IBloodSugarAffector {
 		double timeStepAdministered;
 		double unitsInsulinPerMinute;
 		int durationInMinutes;
@@ -17,14 +17,10 @@ using AssemblyCSharp;
 			return tick > timeStepAdministered + this.durationInMinutes;
 		}
 
-		public bool HasBegun(double tick){
-			return tick >= timeStepAdministered;
-		}
-
 	    public string Name { get; private set; }
 
 	    public float GetAlterationForTick(double tick, IDiabetesPatient patient){
-			if(this.HasBegun(tick) && !this.IsExpired (tick)){
+			if(tick >= this.timeStepAdministered && !this.IsExpired (tick)){
 				return Convert.ToSingle(LibGlucoDyn.deltatempBGI(tick, this.unitsInsulinPerMinute, patient.getInsulinSensitivity(), patient.getPersonalInsulinDuration(), Convert.ToInt64(timeStepAdministered), Convert.ToInt64(this.timeStepAdministered + this.durationInMinutes)));
 			}
 			return 0;
