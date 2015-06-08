@@ -1,30 +1,28 @@
-	public class Meal : IBloodSugarAffector {
-		public int carbohydratesInGrams;
-		public long durationInTicks;
+using System;
+using AssemblyCSharp;
+public class Meal : IBloodSugarAffector {
+		public double carbohydratesInGrams;
+		public double absorptionFactor;
 		public double timeStepEaten;
-
-	    private float _lastAlteration;
-	    public float LastAlteration  {
-	        get {
-	            return _lastAlteration;
-	        } 
-	    }
-		public Meal(double time, int carbs, long duration, string name="Meal")
+		
+		public Meal(double timeConsumed, double carbsContainedInGrams, double carbTypeAbsorptionFactor, string name="Meal")
 		{
 		    this.Name = name;
-			this.carbohydratesInGrams = carbs;
-			this.durationInTicks = duration;
-			this.timeStepEaten = time;
+			this.carbohydratesInGrams = carbsContainedInGrams;
+			this.absorptionFactor = carbTypeAbsorptionFactor;
+			this.timeStepEaten = timeConsumed;
 		}
 		public bool IsExpired(double tick){
-			return tick > timeStepEaten + durationInTicks;
+			return tick > timeStepEaten + 300;
+		}
+
+		public bool HasBegun(double tick){
+			return tick > timeStepEaten;
 		}
 
 	    public string Name { get; private set; }
 
-
-	    public float GetAlterationForTick(double tick){
-			_lastAlteration =  (float)this.carbohydratesInGrams / (float)this.durationInTicks;
-	        return _lastAlteration;
-	;    }
+	    public float GetAlterationForTick(double tick, IDiabetesPatient patient){
+			return Convert.ToSingle (LibGlucoDyn.deltaBGC(tick-this.timeStepEaten, patient.getInsulinSensitivity(), patient.getCarbRatio(), Convert.ToInt32(this.carbohydratesInGrams), Convert.ToInt32(this.absorptionFactor)));
+		}
 	}
