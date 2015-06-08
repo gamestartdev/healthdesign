@@ -14,7 +14,6 @@ public class DiabetesSimulator : MonoBehaviour, IDiabetesPatient {
     public int insulinDurationInHours = 1;	//1-6 in GlucoDyn, by 1
     public double carbohydrateNeutralizationRatioInGramsToUnitsInsulin = 10.0d; //1-100 in GlucoDyn, by 0.5
     public double insulinSensitivityFactorInMgPerDlToUnitsInsulin = 1.0d;	//1-100 in GlucoDyn, by 0.5
-    public double initialBloodGlucoseLevelInMilligramsPerDecaliter = 10.0d; //1-300 in GlucoDyn, by 10
 
     private List<IBloodSugarAffector> _affectors = new List<IBloodSugarAffector>();
     public List<IBloodSugarAffector> Affectors {
@@ -44,10 +43,10 @@ public class DiabetesSimulator : MonoBehaviour, IDiabetesPatient {
     }
 
     void OnGUI() {
-        showInsulinButtons();
-        showFoodButtons();
-        showBar();
-        showBloodSugarInfo();
+//        showInsulinButtons();
+        //showFoodButtons();
+        //showBar();
+        //showBloodSugarInfo();
         showAffectorNames();
     }
 
@@ -131,13 +130,17 @@ public class DiabetesSimulator : MonoBehaviour, IDiabetesPatient {
         this.addAffector(new Meal(timeStep, strength, time, name));
     }
 
+    public void addInsulin(int units) {
+        this.addAffector(new BolusInsulinShot(timeStep, units));
+    }
+
     void showInsulinButtons() {
 
-        if (GUI.Button(new Rect(0, Screen.height / 6 * 5, Screen.width / 3, Screen.height / 6), "Basal Insulin\r\n.002 units/tick\r\n2400 ticks")) {
-            double insulinPerMinute = .002;
-            int minutesOfActivity = 2400;
-            this.addAffector(new BasalInsulinShot(timeStep, insulinPerMinute, minutesOfActivity));
-        }
+//        if (GUI.Button(new Rect(0, Screen.height / 6 * 5, Screen.width / 3, Screen.height / 6), "Basal Insulin\r\n.002 units/tick\r\n2400 ticks")) {
+//            double insulinPerMinute = .002;
+//            int minutesOfActivity = 2400;
+//            this.addAffector(new BasalInsulinShot(timeStep, insulinPerMinute, minutesOfActivity));
+//        }
         if (GUI.Button(new Rect(Screen.width / 3, Screen.height / 6 * 5, Screen.width / 3, Screen.height / 6), "Bolus Insulin\r\n5 units")) {
             int unitsOfInsulin = 5;
             this.addAffector(new BolusInsulinShot(timeStep, unitsOfInsulin));
@@ -175,9 +178,6 @@ public class DiabetesSimulator : MonoBehaviour, IDiabetesPatient {
     }
     public double getCarbRatio() {
         return this.carbohydrateNeutralizationRatioInGramsToUnitsInsulin;
-    }
-    public double getInitialBG() {
-        return this.initialBloodGlucoseLevelInMilligramsPerDecaliter;
     }
     public int getPersonalInsulinDuration() {
         return this.insulinDurationInHours;

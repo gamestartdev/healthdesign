@@ -82,10 +82,10 @@ public class PlayerInput : MonoBehaviour
 	void onTriggerEnterEvent( Collider2D col )
 	{
 		Debug.Log( "onTriggerEnterEvent: " + col.gameObject.name );
-	    Food food = col.GetComponent<Food>();
-	    if (food)
+	    Consumable consumable = col.GetComponent<Consumable>();
+	    if (consumable)
 	    {
-	        food.Eat(this);
+	        consumable.Eat(this);
 		}
 		var story = col.GetComponent<GifStory>();
 		if(col.GetComponent<GifStory>()){

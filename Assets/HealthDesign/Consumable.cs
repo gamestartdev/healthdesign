@@ -5,18 +5,18 @@ using System.Xml.Schema;
 using Newtonsoft.Json.Utilities;
 
 public class FoodDocument {
-    private Food _food;
+    private Consumable _consumable;
     private WorldObject _worldObject;
 
     public FoodDocument()  : this(InstantiateFood()) {}
-    private static Food InstantiateFood() {
-        return new GameObject("Food").AddComponent<Food>();
+    private static Consumable InstantiateFood() {
+        return new GameObject("Consumable").AddComponent<Consumable>();
     }
 
-    public FoodDocument(Food food) {
-        _food = food;
-        _worldObject = _food.GetComponent<WorldObject>();
-        _food.Document = this;
+    public FoodDocument(Consumable consumable) {
+        _consumable = consumable;
+        _worldObject = _consumable.GetComponent<WorldObject>();
+        _consumable.Document = this;
     }
 //
 //    public int FoodIndex {
@@ -32,20 +32,21 @@ public class FoodDocument {
 //        }
 //    }
 
-    public int strength { get { return _food.strength; } set { _food.strength = value; } }
-    public int timeScale { get { return _food.timeScale; } set { _food.timeScale = value; } }
+    public int strength { get { return _consumable.strength; } set { _consumable.strength = value; } }
+    public int timeScale { get { return _consumable.timeScale; } set { _consumable.timeScale = value; } }
 
     public Vector3 position {
-        get { return _food.transform.position; }
-        set { _food.transform.position = new Vector3(value.x, value.y, 0); }
+        get { return _consumable.transform.position; }
+        set { _consumable.transform.position = new Vector3(value.x, value.y, 0); }
     }
 }
 
-public class Food : MonoBehaviour
+public class Consumable : MonoBehaviour
 {
-    public string Name = "Food";
+    public string Name = "Consumable";
     public int strength = 100;
     public int timeScale = 600;
+    public int _unitsOfInsulin = 0;
     public FoodDocument Document;
 
     public Vector3 position {
@@ -53,6 +54,13 @@ public class Food : MonoBehaviour
         set { transform.position = new Vector3(value.x, value.y, 0); }
     }
     private DiabetesSimulator _simulator;
+
+    void Awake() {
+        //This has to be in awake because of how WorldBuilder sets the layer of 
+        // tool items to be HUD immidiately after instantiating them
+        gameObject.layer = WorldBuilder.ConsumableLayer;
+    }
+
 	void Start ()
 	{
         if (Document == null) {
@@ -62,12 +70,12 @@ public class Food : MonoBehaviour
         var collider = GetComponent<Collider2D>();
         if (!collider) collider = gameObject.AddComponent<BoxCollider2D>();
         collider.isTrigger = true;
-	    gameObject.layer = LayerMask.NameToLayer("Food");
 	}
 	
     public void Eat(PlayerInput playerInput)
     {
         _simulator.addFood(strength, timeScale, Name);
+        _simulator.addInsulin(_unitsOfInsulin);
         Destroy(gameObject);
     }
 }

@@ -5,9 +5,10 @@ public class WorldObject : MonoBehaviour {
     public Transform Model;
 
     public void Placed() {
-        _food = GetComponent<Food>();
-        if (_food) {
-            _food.enabled = true;
+        _consumable = GetComponent<Consumable>();
+        if (_consumable) {
+            _consumable.enabled = true;
+            _consumable.gameObject.layer = WorldBuilder.ConsumableLayer;
         }
         _gifAnimation = GetComponent<GifAnimation>();
         if (_gifAnimation) {
@@ -16,12 +17,12 @@ public class WorldObject : MonoBehaviour {
     }
 
     public void Start() {
-        _food = GetComponent<Food>();
+        _consumable = GetComponent<Consumable>();
         _gifAnimation = GetComponent<GifAnimation>();
     }
 
     public Vector3 Rotation = new Vector3(0, 0.5f, 0);
-    private Food _food;
+    private Consumable _consumable;
     private GifAnimation _gifAnimation;
     private string _idle = "";
     private string _move = "";
@@ -32,11 +33,13 @@ public class WorldObject : MonoBehaviour {
     }
 
     public void SelectedGUI() {
-        if (_food) {
-            GUILayout.Label("Food Strength: " + _food.strength);
-            _food.strength = (int)GUILayout.HorizontalSlider(_food.strength, 0, 500);
-            GUILayout.Label("Food Time Scale: " + _food.timeScale);
-            _food.timeScale = (int)GUILayout.HorizontalSlider(_food.timeScale, 0, 1000);
+        if (_consumable) {
+            GUILayout.Label("Consumable Strength: " + _consumable.strength);
+            _consumable.strength = (int)GUILayout.HorizontalSlider(_consumable.strength, 0, 500);
+            GUILayout.Label("Consumable Time Scale: " + _consumable.timeScale);
+            _consumable.timeScale = (int)GUILayout.HorizontalSlider(_consumable.timeScale, 0, 1000);
+            GUILayout.Label("Units of Insulin: " + _consumable._unitsOfInsulin);
+            _consumable._unitsOfInsulin = (int)GUILayout.HorizontalSlider(_consumable._unitsOfInsulin, 0, 30);
         }
         if (_gifAnimation) {
             UpdateAnim("Idle", ref _idle, _gifAnimation.UpdateIdle);

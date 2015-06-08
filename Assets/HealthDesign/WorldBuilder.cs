@@ -10,6 +10,8 @@ public class WorldBuilder : MonoBehaviour {
     public string textureUrl = "http://piskel-imgstore-b.appspot.com/img/2a8f582e-d065-11e4-a2d8-5bfbb68c2d8f.gif";
     public WorldObject[] WorldObjectPrefabs;
     public static int HudLayer { get { return LayerMask.NameToLayer("HUD"); } }
+    public static int ConsumableLayer { get { return LayerMask.NameToLayer("Consumable"); } } 
+
     public static Camera HudCamera { get { return FindObjectsOfType<Camera>().First(c => c.name == "HUDCam"); } }
 
     private void Awake() {
@@ -22,6 +24,9 @@ public class WorldBuilder : MonoBehaviour {
             worldObject.transform.parent = worldObjectsParent;
             worldObject.transform.localPosition = new Vector3(_worldObjects.Count * 2, 0, 0);
             worldObject.gameObject.layer = HudLayer;
+            Debug.Log(worldObject);
+            Debug.Log(worldObject.gameObject.layer);
+
             _worldObjects.Add(worldObject);
         }
     }
@@ -80,7 +85,6 @@ public class WorldBuilder : MonoBehaviour {
             if (!_selectedObject) return;
 
             if (_moved) {
-                _selectedObject.gameObject.layer = 0;
                 _selectedObject.Placed();
             }
             else {
