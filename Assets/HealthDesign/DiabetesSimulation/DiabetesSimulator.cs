@@ -45,7 +45,7 @@ public class DiabetesSimulator : MonoBehaviour, IDiabetesPatient {
 
     void OnGUI() {
         showInsulinButtons();
-        //showFoodButtons();+
+        showFoodButtons();
         showBar();
         showBloodSugarInfo();
         showAffectorNames();
