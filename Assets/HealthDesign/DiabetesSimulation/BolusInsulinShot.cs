@@ -19,7 +19,7 @@ using AssemblyCSharp;
 
 	    public float GetAlterationForTick(double tick, IDiabetesPatient patient){
 			if(tick >= this.timeStepAdministered && !this.IsExpired (tick)){
-			return Convert.ToSingle(LibGlucoDyn.deltaBGI(tick-this.timeStepAdministered, this.unitsInsulin, patient.getInsulinSensitivity(), patient.getPersonalInsulinDuration()));
+			    return Convert.ToSingle(LibGlucoDyn.deltaBGI(tick-this.timeStepAdministered, this.unitsInsulin, patient.getInsulinSensitivity(), patient.getPersonalInsulinDuration()));
 			}
 			return 0;
 		}

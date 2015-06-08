@@ -10,8 +10,7 @@ class PlayerMovementBloodSugarAffector : IBloodSugarAffector
     {
         var energyOutput = -_energyOutput;
         _energyOutput = 0;
-        _lastAlteration = energyOutput;
-        return energyOutput;
+        return energyOutput *10;
     }
 
     public bool IsExpired(double tick)
@@ -27,13 +26,6 @@ class PlayerMovementBloodSugarAffector : IBloodSugarAffector
     public void QueueEnergyOutput(int bloodSugarAffect)
     {
         _energyOutput += bloodSugarAffect;
-    }
-
-    private float _lastAlteration;
-    public float LastAlteration {
-        get {
-            return _lastAlteration;
-        }
     }
 }
 	

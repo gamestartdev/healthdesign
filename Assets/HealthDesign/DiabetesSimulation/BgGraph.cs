@@ -29,11 +29,6 @@ public class BgGraph : MonoBehaviour {
     // Update is called once per frame
     private void Update() {
         mPlotX.UpdateValue = diabetesSimulator.BloodSugar;
-
-        var effectVal = 0f;
-        foreach (var affector in diabetesSimulator.Affectors) {
-           // effectVal += affector.LastAlteration;
-        }
-        mPlotZ.UpdateValue = effectVal * 100;
+        //mPlotZ.UpdateValue = effectVal * 100;
     }
 }
