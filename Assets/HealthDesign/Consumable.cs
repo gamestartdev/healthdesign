@@ -74,8 +74,14 @@ public class Consumable : MonoBehaviour
 	
     public void Eat(PlayerInput playerInput)
     {
-        _simulator.addFood(strength, timeScale, Name);
-        _simulator.addInsulin(_unitsOfInsulin);
+        if (strength > 0)
+        {
+            _simulator.addFood(strength, timeScale, Name);
+        }
+        if (_unitsOfInsulin > 0)
+        {
+            _simulator.addInsulin(_unitsOfInsulin);
+        }
         Destroy(gameObject);
     }
 }
