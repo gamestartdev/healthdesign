@@ -2,6 +2,7 @@
 using System.Collections;
 using UniRx.Diagnostics;
 using UnityEngine;
+using Logger = UniRx.Diagnostics.Logger;
 
 namespace UniRx.Examples
 {

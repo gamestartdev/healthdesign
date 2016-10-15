@@ -9,13 +9,19 @@ public class BgGraph : MonoBehaviour {
     private NGraphDataSeriesXyLiveTransient mPlotZ;
     public PlayerInput playerInput;
 
+    public int xMin = 0;
+    public int xMax = 10;
+    public int yMin = 0;
+    public int yMax = 10000;
+    public Vector2 _axesDrawAt = new Vector2(-10, -10);
+
     private void Awake() {
         diabetesSimulator = FindObjectOfType<DiabetesSimulator>();
         playerInput = FindObjectOfType<PlayerInput>();
         // Setup the graph
-        mGraph = GetComponent<NGraph>();
-        mGraph.setRanges(0, 10, 0, 10000);
-        mGraph.AxesDrawAt = new Vector2(-10, -10);
+        mGraph = GetComponentInChildren<NGraph>();
+        mGraph.setRanges(xMin, xMax, yMin, yMax);
+        mGraph.AxesDrawAt = _axesDrawAt;
 
         // Make the two plots
         mPlotX = mGraph.addDataSeries<NGraphDataSeriesXyLiveTransient>("Bg", Color.green);
